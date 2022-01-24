@@ -1,0 +1,98 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+header {
+  margin: 3rem 0;
+}
+header .header {
+  text-align: center;
+}
+
+.parent .card_board_container {
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+.parent .card_board_container .card_board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  justify-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+.parent .card_board_container .card_board .box {
+  width: 5rem;
+  height: 5rem;
+  cursor: pointer;
+  border-radius: 8px;
+  position: relative;
+  background-color: #e9ecef;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+.parent .card_board_container .card_board .box.active {
+  transform: rotateY(180deg);
+}
+.parent .card_board_container .card_board .box .face {
+  backface-visibility: hidden;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0.5rem;
+  width: 100%;
+  height: 100%;
+}
+.parent .card_board_container .card_board .box .face img {
+  width: 100%;
+  height: 100%;
+}
+.parent .card_board_container .card_board .box .front img {
+  opacity: 0.5;
+}
+.parent .card_board_container .card_board .box .back {
+  transform: rotateY(-180deg);
+}
+.parent .board {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.parent .board .success {
+  color: red;
+}
+.parent .board .number_of_tries h3 {
+  display: inline;
+}
+.parent .board .number_of_tries p {
+  display: inline;
+}
+.parent .board .shuffle {
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.5s, color 0.5s;
+}
+.parent .board .shuffle:hover {
+  background-color: orange;
+  color: white;
+}
+
+/*# sourceMappingURL=style.css.map */
