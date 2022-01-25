@@ -31,7 +31,8 @@ const imagesArray = [
 
 let canUserClick = false;
 
-shuffleBtn.addEventListener("click", () => {
+// This function shuffles teh cards and begins the game.
+function shuffle() {
   let uniqueIndex = [];
   while (true) {
     let randomCardIndex = Math.floor(Math.random() * 20);
@@ -60,57 +61,89 @@ shuffleBtn.addEventListener("click", () => {
       box.classList.remove("active");
     }, 2000);
   });
-  canUserClick = true;
-  console.log(canUserClick);
+}
+
+// This function compares the two cards which were clicked.
+function compareCards(box) {
   // Initiate an empty array & then store a max of 2 cards in it and start comparing them to each other.
   let twoCardsArray = [];
-
   // This variable stores the number of YES occurrences.
   let yes = 0;
-  let no = 0;
-
-  if (canUserClick) {
+  // When a card is clicked give it an "active" class.
+  box.classList.add("active");
+  twoCardsArray.push(box);
+  if (twoCardsArray.length === 2) {
     boxes.forEach((box) => {
-      box.addEventListener("click", () => {
-        // When a card is clicked give it an "active" class.
-        box.classList.add("active");
-        twoCardsArray.push(box);
-        if (twoCardsArray.length === 2) {
-          if (
-            twoCardsArray[0].querySelector(".face.back > img").src ==
-            twoCardsArray[1].querySelector(".face.back > img").src
-          ) {
-            // Add 1 to the "yes" variable.
-            yes += 1;
-
-            // If the "yes" variable == 10 then the game is over.
-            console.log("yes value is ", yes);
-            console.log("yes length is ", yes.length);
-
-            if (yes === 10) {
-              console.log("Good job! game over.");
-              successMsg.innerText = "Good job!";
-            }
-            // if the two cards match then keep them active and empty the array.
-            twoCardsArray = [];
-          } else {
-            // If the cards don't match subtract one from number of tries left.
-            // Number of tries left
-            if (numberOfTries.innerText != 0) {
-              numberOfTries.innerText -= 1;
-            } else if (numberOfTries.innerText == 0) {
-              successMsg.innerText = "You lost! Start a new game...";
-              canUserClick = false;
-            }
-            // If the cards don't match remove the "active" class after 1 seconds.
-            setTimeout(() => {
-              twoCardsArray[0].classList.remove("active");
-              twoCardsArray[1].classList.remove("active");
-              twoCardsArray = [];
-            }, 1000);
-          }
-        }
-      });
+      box.style.pointerEvents = "none";
     });
+    if (
+      twoCardsArray[0].querySelector(".face.back > img").src ==
+      twoCardsArray[1].querySelector(".face.back > img").src
+    ) {
+      setTimeout(() => {
+        boxes.forEach((box) => {
+          box.style.pointerEvents = "all";
+        });
+      }, 1000);
+      // Add 1 to the "yes" variable.
+      yes += 1;
+      boxes.forEach((box) => {
+        box.style.pointerEvents = "all";
+      });
+      // disable pointer events for the two cards.
+      twoCardsArray.forEach((card) => {
+        card.style.pointerEvents = "none";
+      });
+
+      // If the "yes" variable == 10 then the game is over.
+      console.log("yes value is ", yes);
+      console.log("yes length is ", yes.length);
+
+      if (yes === 10) {
+        console.log("Good job! game over.");
+        successMsg.innerText = "Good job!";
+      }
+      // if the two cards match then keep them active and empty the array.
+      twoCardsArray = [];
+    } else {
+      setTimeout(() => {
+        boxes.forEach((box) => {
+          box.style.pointerEvents = "all";
+        });
+      }, 1000);
+      // If the cards don't match subtract one from number of tries left.
+      // Number of tries left
+      if (numberOfTries.innerText > 0) {
+        numberOfTries.innerText -= 1;
+        if (numberOfTries.innerText == 0) {
+          successMsg.innerText = "You lost! Start a new game...";
+          boxes.forEach((box) => {
+            box.removeEventListener("click", compareCards);
+          });
+        }
+      }
+      // If the cards don't match remove the "active" class after 1 seconds.
+      setTimeout(() => {
+        twoCardsArray[0].classList.remove("active");
+        twoCardsArray[1].classList.remove("active");
+        twoCardsArray = [];
+      }, 1000);
+    }
   }
+}
+
+shuffleBtn.addEventListener("click", () => {
+  shuffle();
+  canUserClick = true;
+  // Turn on pointer events for all boxes.
+  boxes.forEach((box) => {
+    box.style.pointerEvents = "all";
+  });
+  // Set everything back to the default state.
+  numberOfTries.innerText = 10;
+  successMsg.innerText = "";
+
+  boxes.forEach((box) => {
+    box.addEventListener("click", compareCards(box));
+  });
 });
